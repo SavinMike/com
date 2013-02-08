@@ -17,20 +17,22 @@ public class Main {
     static public void  main(String args[]) throws  IOException{
         Map<String,Command> guruTable=new HashMap<>();
         String s="";
-        Stack<Double> stack =new Stack<Double>();
+        Stack<Double> stack =new Stack<>();
         Map<String,Double> define=new HashMap<>();
         Properties p=Info.getProperties();
         //Таблица комманд
 
         for(String cmd:p.stringPropertyNames()){
             try {
-                Command c=(Command) Proxy.newProxyInstance(Command.class.getClassLoader()
-                        ,Class.forName(p.getProperty(cmd).trim()).getInterfaces(), new Handeler());
+//                Command c=(Command) Proxy.newProxyInstance(Command.class.getClassLoader()
+//                        ,Class.forName(p.getProperty(cmd).trim()).getInterfaces(), new Handeler());
 
                 guruTable.put(cmd.trim(), (Command)Class.forName(p.getProperty(cmd).trim()).newInstance());
 
             }
-            catch (ClassNotFoundException | InstantiationException |IllegalAccessException e  ){}
+            catch (ClassNotFoundException | InstantiationException |IllegalAccessException e  ){
+                System.out.println(e);
+            }
         }
 
 
@@ -46,13 +48,11 @@ public class Main {
                     try {
                         Parser.parser(s,  guruTable,stack, define);
                     }
-                    catch (LowElementInStackException | NegativeNumberException  e){
-                        System.out.println(e);
+
+                    catch (CmdException l){
+                        System.out.println(l);
                     }
-                    catch (CmdException e){
-                        System.out.println(e);
-                    }
-                    catch (EmptyStackException e){
+                    catch (EmptyStackException em){
                         System.out.println("Стек пуст");
                     }
                 }
@@ -72,12 +72,10 @@ public class Main {
                 try {
                     Parser.parser(s,  guruTable,stack, define);
                 }
-                catch (LowElementInStackException | NegativeNumberException  e){
-                    System.out.println(e);
-                }
                 catch (CmdException e){
                     System.out.println(e);
                 }
+
                 catch (EmptyStackException e){
                     System.out.println("Стек пуст");
                 }
