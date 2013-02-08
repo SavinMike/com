@@ -1,5 +1,7 @@
 package com.savin.commands;
 
+import com.savin.CalcException.LowElementInStackException;
+
 import java.util.EmptyStackException;
 import java.util.Map;
 import java.util.Stack;
@@ -12,10 +14,11 @@ import java.util.Stack;
  * To change this template use File | Settings | File Templates.
  */
 public class MultCmd extends ValidateCmd implements Command {
-    private double a;
-    private double b;
-    public void execute(String arg,Stack<Double> stack, Map<String,Double> define){
-        try {
+
+    public void execute(String arg,Stack<Double> stack, Map<String,Double> define) throws LowElementInStackException {
+        double a;
+        double b;
+
 
             if(!lowElementInStack(stack)){
                 a=stack.pop();
@@ -23,11 +26,7 @@ public class MultCmd extends ValidateCmd implements Command {
                 stack.push(a*b);
             }
             else
-                System.out.println("В стеке нехватает переменных");
+                throw new LowElementInStackException();
         }
-        catch (EmptyStackException e){
-            System.out.println("Стек пуст");
-            return;
-        }
-    }
+
 }

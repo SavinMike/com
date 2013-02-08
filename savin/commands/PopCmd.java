@@ -12,13 +12,9 @@ import java.util.Stack;
  */
 public class PopCmd implements Command {
     public  void execute(String arg,Stack<Double> stack, Map<String,Double> define) {
-        try {
+
             stack.pop();
-        }
-        catch (EmptyStackException e){
-            System.out.println("Стек пуст");
-            return;
-        }
+
 
     }
 }
