@@ -1,8 +1,6 @@
 package com.savin.commands;
 
 import java.util.*;
-import java.util.Stack;
-
 /**
  * Created with IntelliJ IDEA.
  * User: acer
@@ -11,8 +9,10 @@ import java.util.Stack;
  * To change this template use File | Settings | File Templates.
  */
 public class DefineCmd implements Command {
-    private int index;
-    public void execute(String arg,Stack<Double> stack, Map<String,Double> define){
+    @In(ElementOfAnnotation.CONTEXT)
+    private Map<String,Double> define;
+    public void execute(String arg){
+        int index;
         index=arg.indexOf(' ');
         define.put(arg.substring(0,index).trim(),
                 Double.valueOf(arg.substring(index+1).trim()));

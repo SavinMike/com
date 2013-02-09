@@ -1,5 +1,10 @@
 package com.savin.commands;
 
+import com.savin.calculator.Info;
+
+import java.util.HashMap;
+import java.util.Properties;
+
 /**
  * Created with IntelliJ IDEA.
  * User: acer
@@ -8,14 +13,25 @@ package com.savin.commands;
  * To change this template use File | Settings | File Templates.
  */
 public class CmdFactory{
-    private enum cmdEnum{
-        AddCmd,DefineCmd,DivCmd,Exp,Log,MinusCmd,Multcmd,PopCmd,PowerCmd,PrintCmd,SqrtCmd;
-        static public void add(String enu){
+    private HashMap<String,Command> guruTable=new HashMap<>();
+    public HashMap<String,Command> getCmd(){
+      return guruTable;
+    }
+    public CmdFactory (InitCommands c){
+        try{
+        Properties p= Info.getProperties();
+        for(String cmd:p.stringPropertyNames()){
+
+                Command value = (Command) Class.forName(p.getProperty(cmd)).newInstance();
+                c.init(value);
+
+
+                guruTable.put(cmd.trim(), value);
+
 
         }
-    }
-    public Command getCmd(cmdEnum type) throws ClassNotFoundException, InstantiationException,IllegalAccessException{
-        return (Command)Class.forName(type.name()).newInstance();
-        
+        }catch (ClassNotFoundException | InstantiationException |IllegalAccessException  e){
+            System.out.println(e);
+        }
     }
 }

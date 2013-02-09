@@ -3,8 +3,6 @@ package com.savin.commands;
 import com.savin.CalcException.CmdException;
 import com.savin.CalcException.LowElementInStackException;
 
-import java.util.EmptyStackException;
-import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -16,8 +14,9 @@ import java.util.Stack;
  */
 public class AddCmd extends ValidateCmd implements Command {
 
-    @In(value = ElementOfAnatation.STACK)
-    public void execute(String arg,Stack<Double> stack, Map<String,Double> define) throws CmdException {
+    @In(ElementOfAnnotation.STACK)
+    private Stack<Double> stack;
+    public void execute(String arg) throws CmdException {
         double a;
         double b;
 

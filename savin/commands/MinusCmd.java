@@ -2,8 +2,6 @@ package com.savin.commands;
 
 import com.savin.CalcException.LowElementInStackException;
 
-import java.util.EmptyStackException;
-import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -14,8 +12,9 @@ import java.util.Stack;
  * To change this template use File | Settings | File Templates.
  */
 public class MinusCmd extends ValidateCmd implements Command {
-
-    public void execute(String arg,Stack<Double> stack, Map<String,Double> define) throws LowElementInStackException {
+    @In(ElementOfAnnotation.STACK)
+    private Stack<Double> stack;
+    public void execute(String arg) throws LowElementInStackException {
         double a;
         double b;
 

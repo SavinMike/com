@@ -1,6 +1,5 @@
 package com.savin.commands;
 
-import java.util.*;
 import java.util.Stack;
 
 /**
@@ -11,7 +10,9 @@ import java.util.Stack;
  * To change this template use File | Settings | File Templates.
  */
 public class PopCmd implements Command {
-    public  void execute(String arg,Stack<Double> stack, Map<String,Double> define) {
+    @In(ElementOfAnnotation.STACK)
+    private Stack<Double> stack;
+    public  void execute(String arg) {
 
             stack.pop();
 

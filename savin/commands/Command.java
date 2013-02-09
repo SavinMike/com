@@ -9,8 +9,7 @@ package com.savin.commands;
  */
 import com.savin.CalcException.CmdException;
 
-import java.util.*;
 public interface Command {
-    void execute(String arg,Stack<Double> stack, Map<String,Double> define) throws CmdException;
+    void execute(String arg) throws CmdException;
 
 }

@@ -5,35 +5,59 @@ package com.savin.calculator;
  * СТЕКОВЫЙ КАЛЬКУЯТОР
  */
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 import com.savin.CalcException.CmdException;
-import com.savin.CalcException.LowElementInStackException;
-import com.savin.CalcException.NegativeNumberException;
 import com.savin.commands.*;
-import java.lang.reflect.Proxy;
-public class Main {
+public class Main{
+
+
 
     static public void  main(String args[]) throws  IOException{
-        Map<String,Command> guruTable=new HashMap<>();
         String s="";
-        Stack<Double> stack =new Stack<>();
-        Map<String,Double> define=new HashMap<>();
-        Properties p=Info.getProperties();
+        final Stack<Double> stack =new Stack<>();
+        final Map<String,Double> define=new HashMap<>();
+
         //Таблица комманд
 
-        for(String cmd:p.stringPropertyNames()){
-            try {
-//                Command c=(Command) Proxy.newProxyInstance(Command.class.getClassLoader()
-//                        ,Class.forName(p.getProperty(cmd).trim()).getInterfaces(), new Handeler());
 
-                guruTable.put(cmd.trim(), (Command)Class.forName(p.getProperty(cmd).trim()).newInstance());
+        CmdFactory cmdFactory= new CmdFactory(new InitCommands() {
+        @Override
+        public void init(Command c) {
+
+            for (Field a : c.getClass().getDeclaredFields())  {
+                if(a.getAnnotation(In.class).value()==ElementOfAnnotation.STACK){
+                    try {
+                        a.setAccessible(true);
+                        a.set(c,stack);
+                    }
+                    catch (IllegalAccessException e){System.out.println(e);}
+
+
+                }
+                else if(a.getAnnotation(In.class).value()== ElementOfAnnotation.CONTEXT){
+                    try {
+                        a.setAccessible(true);
+                        a.set(c,define);
+                    }
+                    catch (IllegalAccessException e){System.out.println(e);}
+
+
+                }
 
             }
-            catch (ClassNotFoundException | InstantiationException |IllegalAccessException e  ){
-                System.out.println(e);
-            }
+
         }
+    });
+
+
+
+
+
+
+
+
 
 
 
@@ -46,7 +70,7 @@ public class Main {
 
                 while((s=br.readLine())!=null){
                     try {
-                        Parser.parser(s,  guruTable,stack, define);
+                        Parser.parser(s,  cmdFactory);
                     }
 
                     catch (CmdException l){
@@ -65,12 +89,13 @@ public class Main {
             Scanner cin=new Scanner(System.in);
             for(;;){
                 s=cin.nextLine();
+
                 if (s.trim().toLowerCase().equals("end")){
                     System.out.println("Пока)");
                     break start;
                 }
                 try {
-                    Parser.parser(s,  guruTable,stack, define);
+                    Parser.parser(s,  cmdFactory);
                 }
                 catch (CmdException e){
                     System.out.println(e);

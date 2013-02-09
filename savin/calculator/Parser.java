@@ -1,10 +1,8 @@
 package com.savin.calculator;
 
 import com.savin.CalcException.CmdException;
-import com.savin.commands.Command;
+import com.savin.commands.CmdFactory;
 
-import java.util.Map;
-import java.util.Stack;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,22 +12,24 @@ import java.util.Stack;
  * To change this template use File | Settings | File Templates.
  */
 public class Parser {
-    public static void parser(String s, Map<String,Command> guruTable,Stack<Double> stack,Map<String,Double> define) throws CmdException{
+    public static void parser(String s,CmdFactory cmdFactory) throws CmdException{
         try {
             if(s.trim().indexOf("#")==0){
 
             }
             else
-                if (s.trim().indexOf(' ')>0 && guruTable.containsKey(s.trim().toLowerCase().substring(0,s.trim().indexOf(' '))))
+                if (s.trim().indexOf(' ')>0 && cmdFactory.getCmd().containsKey(s.trim().toLowerCase().substring(0,s.trim().indexOf(' '))))
 
-                    guruTable.get(s.trim().toLowerCase()
+                    cmdFactory.getCmd().get(s.trim().toLowerCase()
                             .substring(0,s.trim().indexOf(' ')))
                             .execute(s.trim()
-                                    .substring(s.trim().indexOf(' ')+1),
-                                    stack,define);
-                else if(guruTable.containsKey(s.toLowerCase().trim())){
-                    guruTable.get(s.toLowerCase().trim())
-                            .execute(s.trim().toLowerCase(),stack,define);
+                                    .substring(s.trim().indexOf(' ')+1)
+                                   );
+                else if(cmdFactory.getCmd().containsKey(s.toLowerCase().trim())){
+                    cmdFactory.getCmd().get(s.toLowerCase().trim())
+                            .execute(s.trim().toLowerCase());
+
+
                 }
                 else {
                     System.out.println("Комманда \"" +s+"\" не существует");

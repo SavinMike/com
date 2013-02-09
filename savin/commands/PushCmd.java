@@ -9,13 +9,15 @@ package com.savin.commands;
  */
 import java.util.*;
 public class PushCmd implements Command {
-    public void execute(String arg,Stack<Double> stack, Map<String,Double> define){
+    @In(ElementOfAnnotation.STACK)
+    private Stack<Double> stack;
+    @SuppressWarnings("unused")
+    @In(ElementOfAnnotation.CONTEXT)
+    private Map<String,Double> define;
+    public void execute(String arg){
         if(define.containsKey(arg))
             stack.push(define.get(arg));
         else
             stack.push(Double.valueOf(arg));
-    }
-    public void getName(){
-        System.out.println("Push");
     }
 }
